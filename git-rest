@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# Copyright 2012 Daniel Rench
+# MIT licensed; see the bundled LICENSE file
+
+case "$1" in
+    put)
+        hash=`git hash-object -w --stdin`
+        if [ -z $2 ]; then
+            echo $hash
+        else
+            git tag $2 $hash
+        fi
+        ;;
+    get)
+        if [ -z $2 ]; then
+            echo "Missing tagname argument!"
+            exit 111
+        fi
+        git cat-file blob $2
+        ;;
+    delete)
+        if [ -z $2 ]; then
+            echo "Missing object name argument!"
+            exit 111
+        fi
+        git tag -d $2
+        ;;
+    *)
+        echo "usage: git rest [put|get|delete] tagname"
+        ;;
+esac
