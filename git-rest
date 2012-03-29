@@ -5,11 +5,12 @@
 
 case "$1" in
     put)
-        hash=`git hash-object -w --stdin`
         if [ -z $2 ]; then
-            echo $hash
+            echo "Missing tagname argument!"
+            exit 111
         else
-            git tag $2 $hash
+            hash=`git hash-object -w --stdin`
+            git tag -f $2 $hash > /dev/null
         fi
         ;;
     get)
@@ -27,14 +28,9 @@ case "$1" in
         git tag -d $2
         ;;
     post)
-        if [ -z $2 ]; then
-            echo "Missing object name argument!"
-            exit 111
-        fi
-        hash=`git hash-object -w --stdin`
-        git tag -d $2 > /dev/null && git tag $2 $hash
+        git hash-object -w --stdin
         ;;
     *)
-        echo "usage: git rest [put|get|delete] tagname"
+        echo "usage: git rest [put|get|delete|post] tagname"
         ;;
 esac
