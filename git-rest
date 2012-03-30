@@ -12,7 +12,7 @@ case "$1" in
             exit 111
         else
             hash=`git hash-object -w --stdin`
-            git tag -f $2 $hash > /dev/null
+            git tag -a -m '!git-rest' -f $2 $hash > /dev/null
         fi
         ;;
     get)
