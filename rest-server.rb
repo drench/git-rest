@@ -11,11 +11,16 @@ end
 # curl http://localhost:4567/some/path
 get %r{^/([\w\-/]+)} do |c|
   head = {}
-  head[:ETag] = `git rev-parse '#{c}'`
+  head[:ETag] = `git rev-parse '#{c}'`.chomp
   if $? == 0
-    rc = 200
-    body = `git rest get #{c}`
-    head['Content-Type'] = 'application/octet-stream'
+    inm = request.env['HTTP_IF_NONE_MATCH']
+    if inm && inm == head[:ETag]
+      rc = 304
+    else
+      rc = 200
+      body = `git rest get #{c}`
+      head['Content-Type'] = 'application/octet-stream'
+    end
   else
     rc = 404
     body = %q{}
@@ -28,10 +33,15 @@ end
 # curl -I http://localhost:4567/some/path
 head %r{^/([\w\-/]+)} do |c|
   head = {}
-  head[:ETag] = `git rev-parse '#{c}'`
+  head[:ETag] = `git rev-parse '#{c}'`.chomp
   if $? == 0
-    rc = 200
-    head['Content-Type'] = 'application/octet-stream'
+    inm = request.env['HTTP_IF_NONE_MATCH']
+    if inm && inm == head[:ETag]
+      rc = 304
+    else
+      rc = 200
+      head['Content-Type'] = 'application/octet-stream'
+    end
   else
     rc = 404
     head.delete(:ETag)
