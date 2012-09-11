@@ -2,14 +2,16 @@
 
 require 'sinatra'
 
+TAG_PATTERN = %r{^/([\w\-/]+)}
+
 # curl -X DELETE http://localhost:4567/some/path
-delete %r{^/([\w\-/]+)} do |c|
+delete TAG_PATTERN do |c|
   system "git rest delete #{c}"
   [ 204, {}, %q{} ]
 end
 
 # curl http://localhost:4567/some/path
-get %r{^/([\w\-/]+)} do |c|
+get TAG_PATTERN do |c|
   head = {}
   head[:ETag] = `git rev-parse '#{c}'`.chomp
   if $? == 0
@@ -31,7 +33,7 @@ get %r{^/([\w\-/]+)} do |c|
 end
 
 # curl -I http://localhost:4567/some/path
-head %r{^/([\w\-/]+)} do |c|
+head TAG_PATTERN do |c|
   head = {}
   head[:ETag] = `git rev-parse '#{c}'`.chomp
   if $? == 0
@@ -66,7 +68,7 @@ post '/' do
 end
 
 # curl -d "Some String" http://localhost:4567/some/path
-put %r{^/([\w\-/]+)} do |c|
+put TAG_PATTERN do |c|
   request.body.rewind
   grp = IO.popen(%Q(git rest put '#{c}'), 'w+')
   request.body.each do |chunk|
