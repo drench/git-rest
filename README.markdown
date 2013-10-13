@@ -23,5 +23,12 @@ Better yet, tell git that you always want these kinds of tags:
     % git config remote.<REMOTENAME>.tagopt --tags
     % git fetch
 
+Installation
+============
 
-To use, put git-rest somewhere in your $PATH. May I suggest ~/bin/?
+If you use homebrew:
+
+    % brew tap drench/moregit
+    % brew install git-rest
+
+Otherwise, put `git-rest` somewhere in your `$PATH`. May I suggest `~/bin/`?
