@@ -1,0 +1,45 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "GIT\-REST" "1" "February 2014" "" ""
+.
+.SH "NAME"
+\fBgit\-rest\fR \- CRUD for the git filesystem
+.
+.SH "SYNOPSYS"
+\fBgit rest [delete|get|post|put] [TAGNAME]\fR
+.
+.SH "DESCRIPTION"
+\fBgit rest\fR is an interface to creating, reading, and destroying arbitrary objects (blobs) in the git filesystem\.
+.
+.SH "USAGE"
+.
+.nf
+
+% echo hello | git rest put greeting
+% git rest get greeting
+hello
+% git rest delete greeting
+% git rest get greeting
+fatal: Not a valid object name greeting
+.
+.fi
+.
+.SH "TIPS"
+These objects and related tags are not part of any branch or "working tree", so if you want them included when fetching from remotes you need to include the \fB\-\-tags\fR argument when running \fBgit fetch\fR, or configure git like so:
+.
+.IP "" 4
+.
+.nf
+
+% git config remote\.<REMOTENAME>\.tagopt \-\-tags
+.
+.fi
+.
+.IP "" 0
+.
+.SH "AUTHOR"
+Daniel Rench
+.
+.SH "SEE ALSO"
+git(1), git\-hash\-object(1), git\-tag(1), git\-fetch(1), git\-rest on github \fIhttps://github\.com/drench/git\-rest\fR

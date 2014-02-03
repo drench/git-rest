@@ -1,0 +1,37 @@
+git-rest(1) -- CRUD for the git filesystem
+==========================================
+
+## SYNOPSYS
+
+`git rest [delete|get|post|put] [TAGNAME]`
+
+## DESCRIPTION
+
+`git rest` is an interface to creating, reading, and destroying arbitrary
+objects (blobs) in the git filesystem.
+
+## USAGE
+
+    % echo hello | git rest put greeting
+    % git rest get greeting
+    hello
+    % git rest delete greeting
+    % git rest get greeting
+    fatal: Not a valid object name greeting
+
+## TIPS
+
+These objects and related tags are not part of any branch or "working tree",
+so if you want them included when fetching from remotes you need to include
+the `--tags` argument when running `git fetch`, or configure git like so:
+
+    % git config remote.<REMOTENAME>.tagopt --tags
+
+## AUTHOR
+
+Daniel Rench
+
+## SEE ALSO
+
+git(1), git-hash-object(1), git-tag(1), git-fetch(1),
+[git-rest on github](https://github.com/drench/git-rest)
